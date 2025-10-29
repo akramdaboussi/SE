@@ -25,4 +25,10 @@ public interface BitPacker {
      * @return La valeur originale.
      */
     int get(int i);
+
+    /**
+     * (Pour le débogage) Retourne le tableau compressé brut.
+     * @return Le tableau d'entiers compressés.
+     */
+    public int[] getRawCompressedData();
 }
