@@ -98,4 +98,9 @@ public class BitPackingNoOverlap implements BitPacker {
         }
         return decompressedArray;
     }
+
+    @Override
+    public int[] getRawCompressedData() {
+        return this.compressedData;
+    }
 }
