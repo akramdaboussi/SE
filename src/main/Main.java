@@ -8,14 +8,27 @@ package main;
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Usage: java main.Main <chemin_vers_le_fichier_de_test>");
+        if (args.length != 2) {
+            System.out.println("Usage: java main.Main <chemin_vers_le_fichier> <type_compression>");
+            System.out.println("Types valides : 'overlap' ou 'no_overlap'");
             return;
         }
         
         String filePath = args[0];
-        BenchmarkRunner runner = new BenchmarkRunner(filePath);
+        String typeString = args[1];
         
+        CompressionType compressionType;
+        if ("overlap".equalsIgnoreCase(typeString)) {
+            compressionType = CompressionType.WITH_OVERLAP;
+        } else if ("no_overlap".equalsIgnoreCase(typeString)) {
+            compressionType = CompressionType.NO_OVERLAP;
+        } else {
+            System.out.println("Erreur : Type de compression '" + typeString + "' non valide.");
+            System.out.println("Types valides : 'overlap' ou 'no_overlap'");
+            return;
+        }
+        BenchmarkRunner runner = new BenchmarkRunner(filePath, compressionType);
+
         try {
             runner.run();
         } catch (Exception e) {
