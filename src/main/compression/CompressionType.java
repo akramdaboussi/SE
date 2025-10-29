@@ -1,4 +1,4 @@
-package main;
+package main.compression;
 
 public enum CompressionType {
     NO_OVERLAP,     // Sans chevauchement

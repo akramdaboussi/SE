@@ -1,4 +1,6 @@
-package main;
+package main.app;
+
+import main.compression.CompressionType;
 
 /**
  * Point d'entrée principal du programme.

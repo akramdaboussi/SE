@@ -1,6 +1,10 @@
-package main;
+package main.app;
 
 import java.util.*;
+
+import main.compression.BitPacker;
+import main.compression.BitPackerFactory;
+import main.compression.CompressionType;
 
 /**
  * Gère l'exécution du test de compression, les mesures de performance et le mode interactif.

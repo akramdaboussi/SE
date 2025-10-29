@@ -35,7 +35,7 @@ fi
 
 # Définit le dossier des tests
 TEST_DIR="src/tests"
-JAVA_MAIN_CLASS="main.Main"
+JAVA_MAIN_CLASS="main.app.Main"
 
 # --- 3. Exécution d'un test ---
 echo -e "\n--- Sélection du fichier de test ---"

@@ -1,4 +1,4 @@
-package main;
+package main.compression;
 
 /**
  * Interface pour les compresseurs de type Bit-Packing.

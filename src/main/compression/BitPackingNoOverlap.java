@@ -1,4 +1,4 @@
-package main;
+package main.compression;
 
 /*
 * Classe pour compresser et décompresser un tableau d'entiers 
