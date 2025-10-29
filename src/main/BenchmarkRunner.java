@@ -1,18 +1,18 @@
 package main;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 /**
- * Gère l'exécution du test de compression, les mesures de performance
- * et le mode interactif.
+ * Gère l'exécution du test de compression, les mesures de performance et le mode interactif.
  */
 public class BenchmarkRunner {
 
     private String filePath;
+    private CompressionType compressionType;
 
-    public BenchmarkRunner(String filePath) {
+    public BenchmarkRunner(String filePath, CompressionType compressionType) {
         this.filePath = filePath;
+        this.compressionType = compressionType;
     }
 
     /**
@@ -29,14 +29,27 @@ public class BenchmarkRunner {
 
         // --- Compression ---
         System.out.println("\n--- Test de Compression/Décompression ---");
-        
-        BitPacker compressor = new BitPackingNoOverlap();
-        
+        BitPacker compressor = BitPackerFactory.create(this.compressionType);
+
         long startTimeCompress = System.nanoTime();
         compressor.compress(originalData);
         long durationCompress = System.nanoTime() - startTimeCompress;
-        System.out.println(" *** Temps de compression : " + Utils.formatDuration(durationCompress) + " ***");
+        System.out.println(" *** Temps de compression : " + Utils.formatDuration(durationCompress) + " ***\n");
 
+        // --- DÉBOGAGE ---
+        System.out.println("--- Données brutes compressées (" + compressor.getClass().getSimpleName() + ") ---");
+        int[] rawData = compressor.getRawCompressedData();
+        if (rawData != null) {
+            System.out.println("Taille du tableau de sortie : " + rawData.length + " entiers.");
+            for (int i = 0; i < rawData.length; i++) {
+                // Affiche l'entier en Binaire (formaté sur 32 bits avec des zéros)
+                System.out.println(" tab[" + i + "] = " + 
+                    String.format("%32s", Integer.toBinaryString(rawData[i])).replace(' ', '0')
+                );
+            }
+        }
+        System.out.println("\n");
+        
         // --- Décompression ---
         long startTimeDecompress = System.nanoTime();
         int[] decompressedData = compressor.decompress();
@@ -62,10 +75,10 @@ public class BenchmarkRunner {
     private void runInteractiveMode(BitPacker compressor) {
         System.out.println("\n--- Récupérer un élément ---");
         try (Scanner scanner = new Scanner(System.in)) {
+            int maxIndex = compressor.decompress().length - 1;
             while (true) {
-                System.out.print("Entrez un index pour récupérer sa valeur (ou 'q' pour quitter) : ");
+                System.out.print("Entrez un index pour récupérer sa valeur (<= " + maxIndex + ") (ou 'q' pour quitter) : ");
                 String input = scanner.nextLine();
-
                 if (input.equalsIgnoreCase("q")) break;
 
                 try {
@@ -75,7 +88,7 @@ public class BenchmarkRunner {
                     int value = compressor.get(index);
                     long durationGet = System.nanoTime() - startTimeGet;
 
-                    System.out.println(" *** L'élément à l'index " + index + " est : " + value + " ***");
+                    System.out.println(" \n *** L'élément à l'index " + index + " est : " + value + " ***");
                     System.out.println(" *** Temps d'accès 'get' : " + Utils.formatDuration(durationGet) + " ***\n");
 
                 } catch (NumberFormatException e) {
