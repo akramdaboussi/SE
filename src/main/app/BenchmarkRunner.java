@@ -33,7 +33,7 @@ public class BenchmarkRunner {
 
         // --- Compression ---
         System.out.println("\n--- Test de Compression/Décompression ---");
-        BitPacker compressor = BitPackerFactory.create(this.compressionType);
+        BitPacker compressor = BitPackerFactory.create(this.compressionType); // On delegue la création du compresseur à la factory
 
         long startTimeCompress = System.nanoTime();
         compressor.compress(originalData);
@@ -42,15 +42,21 @@ public class BenchmarkRunner {
 
         // --- DÉBOGAGE ---
         System.out.println("--- Données brutes compressées (" + compressor.getClass().getSimpleName() + ") ---");
-        int[] rawData = compressor.getRawCompressedData();
-        if (rawData != null) {
+        
+        // Récupère les données compressées brutes
+        int[] rawData = compressor.getRawCompressedData(); 
+        
+        if (rawData != null && rawData.length > 0) {
             System.out.println("Taille du tableau de sortie : " + rawData.length + " entiers.");
+            
             for (int i = 0; i < rawData.length; i++) {
                 // Affiche l'entier en Binaire (formaté sur 32 bits avec des zéros)
                 System.out.println(" tab[" + i + "] = " + 
                     String.format("%32s", Integer.toBinaryString(rawData[i])).replace(' ', '0')
                 );
             }
+        } else {
+             System.out.println("Aucune donnée compressée n'a été générée.");
         }
         System.out.println("\n");
         
