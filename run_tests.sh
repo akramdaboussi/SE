@@ -41,10 +41,16 @@ JAVA_MAIN_CLASS="main.app.Main"
 echo -e "\n--- Sélection du fichier de test ---"
 PS3="Entrez le numéro du test (ou 'q' pour quitter) : "
 
-files_with_path=("$TEST_DIR"/*.txt)
+# Trouve tous les .txt récursivement (dans les sous-dossiers)
+files_with_path=()
+while IFS= read -r file; do
+    files_with_path+=("$file")
+done < <(find "$TEST_DIR" -type f -name "*.txt" | sort)
+
+# Affiche le chemin relatif (ex: "overflow/test_09.txt")
 options_display=()
 for f in "${files_with_path[@]}"; do
-    options_display+=("$(basename "$f")")
+    options_display+=("${f#$TEST_DIR/}")
 done
 
 select opt_display in "${options_display[@]}"; do
