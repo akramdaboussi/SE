@@ -13,6 +13,8 @@ public class BitPackerFactory {
                 return new BitPackingNoOverlap();
             case WITH_OVERLAP:
                 return new BitPackingWithOverlap();
+            case WITH_OVERFLOW:
+                return new BitPackingWithOverflow();
             default:
                 throw new IllegalArgumentException("Type de compression inconnu: " + type);
         }
