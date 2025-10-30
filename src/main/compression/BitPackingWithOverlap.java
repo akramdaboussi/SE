@@ -8,7 +8,7 @@ public class BitPackingWithOverlap implements BitPacker {
 
     private int[] compressedData; // Le tableau compressé
     private int bitsPerValue; // Le 'k' de l'énoncé qui indique le nombre de bits sur lesquels chaque entier est stocké
-    private int originalSize; // Taille du tableau original
+    private int size_tab; // Taille du tableau original
     
     // Le masque est calculé 1 seule fois et stocké ici
     private long mask; 
@@ -16,12 +16,12 @@ public class BitPackingWithOverlap implements BitPacker {
     @Override
     public int[] compress(int[] tab) {
         if (tab == null || tab.length == 0) {
-            this.originalSize = 0;
+            this.size_tab = 0;
             this.compressedData = new int[0];
             return this.compressedData;
         }
 
-        this.originalSize = tab.length;
+        this.size_tab = tab.length;
 
         // On cherche la valeur maximale sur laquelle on va se baser pour déterminer le nombre de bits 'k'
         int maxVal = 0;
@@ -44,7 +44,7 @@ public class BitPackingWithOverlap implements BitPacker {
         }
 
         // On calcule la taille de sortie
-        long totalBitsNeeded = (long) this.originalSize * this.bitsPerValue;
+        long totalBitsNeeded = (long) this.size_tab * this.bitsPerValue;
         int compressedSize = (int) ((totalBitsNeeded + 31) / 32); 
         this.compressedData = new int[compressedSize];
         
@@ -53,7 +53,7 @@ public class BitPackingWithOverlap implements BitPacker {
 
         // On remplit le tableau
         long currentBitOffset = 0;
-        for (int j = 0; j < this.originalSize; j++) {
+        for (int j = 0; j < this.size_tab; j++) {
             long valueToPack = tab[j];
             int arrayIndex = (int) (currentBitOffset / 32);
             int bitInInt = (int) (currentBitOffset % 32);
@@ -78,8 +78,8 @@ public class BitPackingWithOverlap implements BitPacker {
         if (compressedData == null) {
             throw new IllegalStateException("Le tableau n'a pas encore été compressé.");
         }
-        if (i < 0 || i >= this.originalSize) {
-            throw new IndexOutOfBoundsException("Index " + i + " hors des limites pour la taille " + this.originalSize);
+        if (i < 0 || i >= this.size_tab) {
+            throw new IndexOutOfBoundsException("Index " + i + " hors des limites pour la taille " + this.size_tab);
         }
 
         long startBit = (long) i * this.bitsPerValue;
@@ -116,10 +116,10 @@ public class BitPackingWithOverlap implements BitPacker {
             throw new IllegalStateException("Le tableau n'a pas encore été compressé.");
         }
 
-        int[] decompressedArray = new int[this.originalSize];
+        int[] decompressedArray = new int[this.size_tab];
         long currentBitOffset = 0;
 
-        for (int i = 0; i < this.originalSize; i++) {
+        for (int i = 0; i < this.size_tab; i++) {
             
             int arrayIndex = (int) (currentBitOffset / 32);
             int bitInInt = (int) (currentBitOffset % 32);
