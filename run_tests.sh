@@ -9,12 +9,12 @@ find src/main -name "*.java" -exec javac -d . {} +
 # --- 2. Sélection du type de compression ---
 echo -e "\n--- Choix du type de compression ---"
 PS3="Quel type de compresseur utiliser ? : "
-options_compression=("no_overlap" "overlap" "Quitter")
+options_compression=("no_overlap" "overlap" "with_overflow" "Quitter")
 
 # On stocke le choix dans la variable $comp_type
 select comp_type in "${options_compression[@]}"; do
     case "$comp_type" in
-        "no_overlap" | "overlap")
+        "no_overlap" | "overlap" | "with_overflow")
             echo "Mode sélectionné : $comp_type"
             break
             ;;
