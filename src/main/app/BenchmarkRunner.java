@@ -74,6 +74,22 @@ public class BenchmarkRunner {
             return; 
         }
 
+        // Calcul du seuil de rentabilité
+        System.out.println("\n--- Analyse de Rentabilité (Seuil 't') ---");
+        // T_cost = T_comp + T_decomp
+        long T_cost = durationCompress + durationDecompress; 
+        
+        // N_gain = N - N_comp
+        int N_gain = originalData.length - rawData.length;
+        if (N_gain <= 0) {
+            System.out.println("Aucun gain de taille obtenu après compression.");
+        } else {
+            // t > T_cost / N_gain
+            long t_seuil = T_cost / N_gain; 
+            System.out.println("La compression est rentable si la latence est > " + Utils.formatDuration(t_seuil));
+
+        }
+
         // --- Mode interactif (pour le get()) ---
         runInteractiveMode(compressor);
     }
