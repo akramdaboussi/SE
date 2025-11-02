@@ -1,4 +1,4 @@
-# Projet SE
+# Projet SE Daboussi Akram
 Data compressing for speed up transmission
 
 # Rendre le script executable
